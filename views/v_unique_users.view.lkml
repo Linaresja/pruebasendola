@@ -224,6 +224,18 @@ view: v_unique_users {
     type: number
     sql: ${TABLE}.usi_accounts ;;
   }
+
+  dimension: sponsor_bank {
+    type: string
+    sql:
+    CASE
+      WHEN ${banner_accounts} > 0 THEN 'Banner Bank'
+      WHEN ${banner_accounts} = 0 AND ${coppel_accounts} > 0 THEN 'Coppel'
+      WHEN ${banner_accounts} = 0 AND ${coppel_accounts} = 0 AND ${usi_accounts} > 0 THEN 'USI'
+      ELSE 'Without Program'
+    END ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [first_name, last_name, middle_name, full_name]

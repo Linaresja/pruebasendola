@@ -104,6 +104,19 @@ view: transaction_plattform {
     type: string
     sql: ${TABLE}.user_id ;;
   }
+
+  dimension: dd_deposit {
+    type: yesno
+    sql:
+    CASE
+      WHEN ${txn_type} = 'credit' AND (
+        CONTAINS(${description}, "PAYROLL") OR
+        CONTAINS(${description}, "JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE") OR
+        ${description} ~ "PAY [0-9]+"
+      ) THEN TRUE
+      ELSE FALSE
+    END ;;
+  }
   measure: count {
     type: count
     drill_fields: [name]

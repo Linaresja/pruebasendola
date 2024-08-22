@@ -38,3 +38,4 @@ explore: combined_data {
     relationship: many_to_one
   }
 }
+

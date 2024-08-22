@@ -105,18 +105,9 @@ view: transaction_plattform {
     sql: ${TABLE}.user_id ;;
   }
 
-  dimension: dd_deposit {
-    type: yesno
-    sql:
-    CASE
-      WHEN ${txn_type} = 'credit' AND (
-        REGEXP_CONTAINS(${description}, r'PAYROLL') OR
-        REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
-        REGEXP_CONTAINS(${description}, r'PAY \d+')
-      ) THEN TRUE
-      ELSE FALSE
-    END ;;
-  }
+
+
+
   measure: count {
     type: count
     drill_fields: [name]

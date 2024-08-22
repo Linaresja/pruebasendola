@@ -110,10 +110,11 @@ view: transaction_plattform {
     sql:
     CASE
       WHEN ${txn_type} = 'credit' AND (
-        CONTAINS(${description}, "PAYROLL") OR
-        CONTAINS(${description}, "JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE") OR
-        ${description} ~ "PAY [0-9]+"
-      ) THEN TRUE
+        REGEXP_CONTAINS(${description}, r'PAYROLL') OR
+        REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
+        REGEXP_CONTAINS(${description}, r'PAY \d+')
+      )
+      THEN TRUE
       ELSE FALSE
     END ;;
   }

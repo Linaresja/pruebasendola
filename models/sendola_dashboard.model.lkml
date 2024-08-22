@@ -30,7 +30,6 @@ explore: bank_accounts {}
 explore: v_unique_users {}
 
 explore: transaction_plattform {}
-
 explore: combined_data {
    from: transaction_plattform  # Vista principal
   join: v_unique_users {
@@ -38,4 +37,6 @@ explore: combined_data {
     relationship: many_to_one
   }
 }
+
+
 

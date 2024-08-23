@@ -30,3 +30,6 @@ explore: bank_accounts {}
 explore: v_unique_users {}
 
 include: "/views/combined_view.view.lkml"
+explore: combined_view {
+  from: derived_table  # Aquí se corrige el nombre a "combined_view".
+}

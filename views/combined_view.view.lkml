@@ -58,6 +58,9 @@ view: derived_table {
       END ;;
   }
 
+ measure: count {
+  type: count
+}
 
   # Aquí puedes definir otras dimensiones y medidas según sea necesario.
   }

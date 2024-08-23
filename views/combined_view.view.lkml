@@ -4,12 +4,18 @@ view: derived_table {
             tp.customer_id,
             tp.txn_type,
             tp.description,
-            vu.sponsor_bank,
+            CASE
+              WHEN vu.banner_accounts > 0 THEN 'Banner Bank'
+              WHEN vu.banner_accounts = 0 AND vu.coppel_accounts > 0 THEN 'Coppel'
+              WHEN vu.banner_accounts = 0 AND vu.coppel_accounts = 0 AND vu.usi_accounts > 0 THEN 'USI'
+              ELSE 'Without Program'
+            END AS sponsor_bank,
             vu.plaid_accounts
           FROM `dwh_sendola.transaction_plattform` tp
           LEFT JOIN `dwh_sendola.v_unique_users` vu
           ON tp.customer_id = vu.customer_id ;;
   }
+
 
   dimension: customer_id {
     type: string

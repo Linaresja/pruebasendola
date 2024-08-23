@@ -9,7 +9,7 @@ view: derived_table {
   # y `v_unique_users` (vu) sobre la base del campo `customer_id`.
   derived_table: {
     sql: SELECT
-            tp.customer_id,
+            tp.user_id,
             tp.txn_type,
             tp.description,
             CASE
@@ -21,7 +21,7 @@ view: derived_table {
             vu.plaid_accounts
           FROM `dwh_sendola.v_unique_users` vu
           LEFT JOIN `dwh_sendola.transaction_plattform` tp
-          ON tp.customer_id = vu.customer_id ;;
+          ON tp.user_id = vu.user_id ;;
   }
 
 

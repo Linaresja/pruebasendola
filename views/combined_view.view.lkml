@@ -78,5 +78,12 @@ view: derived_table {
   type: count
 }
 
+# Medida que cuenta el número de registros en la vista combinada.
+  measure: distinct_user_count {
+    type: count_distinct
+    sql: ${user_id} ;;
+    description: "Cuenta el número de usuarios únicos basados en el campo user_id."
+  }
+
   # Aquí puedes definir otras dimensiones y medidas según sea necesario.
   }

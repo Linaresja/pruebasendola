@@ -113,10 +113,15 @@ view: transaction_plattform {
         REGEXP_CONTAINS(${description}, r'PAYROLL') OR
         REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
         REGEXP_CONTAINS(${description}, r'PAY \d+')
-      ) THEN TRUE
+      )
+      THEN TRUE
       ELSE FALSE
     END ;;
   }
+
+
+
+
   measure: count {
     type: count
     drill_fields: [name]

@@ -28,3 +28,5 @@ persist_with: sendola_dashboard_default_datagroup
 explore: bank_accounts {}
 
 explore: v_unique_users {}
+
+include: "/views/combined_view.view.lkml"

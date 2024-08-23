@@ -50,5 +50,6 @@ view: derived_table {
       END ;;
   }
 
+
   # Aquí puedes definir otras dimensiones y medidas según sea necesario.
   }

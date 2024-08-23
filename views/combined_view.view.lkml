@@ -51,6 +51,8 @@ view: derived_table {
           REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
           REGEXP_CONTAINS(${description}, r'PAY \d+')
         )
+        AND ${sponsor_bank} = 'Banner Bank'
+        AND ${plaid_accounts} > 0
         THEN TRUE
         ELSE FALSE
       END ;;

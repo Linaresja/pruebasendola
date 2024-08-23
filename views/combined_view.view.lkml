@@ -49,6 +49,12 @@ view: derived_table {
     type: number
     sql: ${TABLE}.plaid_accounts ;;
   }
+
+  dimension: user_id {
+    type: string
+    sql: ${TABLE}.user_id ;;
+  }
+
  # Esta dimensión calcula si una transacción es un depósito directo (dd_deposit).
   # La regla se basa en que el tipo de transacción sea "credit" y que la descripción coincida con ciertos patrones,
   # además de que el banco patrocinador sea "Banner Bank" y el cliente tenga más de 0 cuentas Plaid.

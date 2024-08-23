@@ -1,4 +1,12 @@
+# Esta vista combinada, llamada "derived_table", fue creada para unir y transformar datos
+# de dos tablas principales: `transaction_plattform` y `v_unique_users`.
+# La vista tiene como objetivo simplificar el análisis de transacciones que
+# involucren depósitos directos (dd_deposit) y categorizarlos según el banco patrocinador (sponsor_bank).
+# Además, se considera la presencia de cuentas asociadas en la tabla `v_unique_users` para determinar reglas adicionales.
+
 view: derived_table {
+  # Esta tabla derivada realiza una consulta SQL que une las tablas `transaction_plattform` (tp)
+  # y `v_unique_users` (vu) sobre la base del campo `customer_id`.
   derived_table: {
     sql: SELECT
             tp.customer_id,
@@ -41,7 +49,9 @@ view: derived_table {
     type: number
     sql: ${TABLE}.plaid_accounts ;;
   }
-
+ # Esta dimensión calcula si una transacción es un depósito directo (dd_deposit).
+  # La regla se basa en que el tipo de transacción sea "credit" y que la descripción coincida con ciertos patrones,
+  # además de que el banco patrocinador sea "Banner Bank" y el cliente tenga más de 0 cuentas Plaid.
   dimension: dd_deposit {
     type: yesno
     sql:
@@ -57,7 +67,7 @@ view: derived_table {
         ELSE FALSE
       END ;;
   }
-
+# Medida que cuenta el número de registros en la vista combinada.
  measure: count {
   type: count
 }

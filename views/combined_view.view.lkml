@@ -19,8 +19,8 @@ view: derived_table {
               ELSE 'Without Program'
             END AS sponsor_bank,
             vu.plaid_accounts
-          FROM `dwh_sendola.transaction_plattform` tp
-          LEFT JOIN `dwh_sendola.v_unique_users` vu
+          FROM `dwh_sendola.v_unique_users` vu
+          LEFT JOIN `dwh_sendola.transaction_plattform` tp
           ON tp.customer_id = vu.customer_id ;;
   }
 
@@ -61,8 +61,8 @@ view: derived_table {
           REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
           REGEXP_CONTAINS(${description}, r'PAY \d+')
         )
-        AND ${sponsor_bank} = 'Banner Bank'
-        AND ${plaid_accounts} > 0
+        or ( ${sponsor_bank} = 'Banner Bank'
+        AND ${plaid_accounts} > 0)
         THEN TRUE
         ELSE FALSE
       END ;;

@@ -28,15 +28,3 @@ persist_with: sendola_dashboard_default_datagroup
 explore: bank_accounts {}
 
 explore: v_unique_users {}
-
-explore: transaction_plattform {}
-explore: combined_data {
-   from: transaction_plattform  # Vista principal
-  join: v_unique_users {
-    sql_on: ${customer_id} = ${v_unique_users.customer_id} ;;
-    relationship: many_to_one
-  }
-}
-
-
-

@@ -33,3 +33,7 @@ include: "/views/combined_view.view.lkml"
 explore: combined_view {
   from: derived_table  # Aquí se corrige el nombre a "combined_view".
 }
+
+explore: person_kyc_level {}
+
+explore: total_users_by_day {}

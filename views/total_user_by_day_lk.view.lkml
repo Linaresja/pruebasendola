@@ -28,7 +28,7 @@ view: total_user_by_day_lk {
 
   # Métrica que calcula el número de nuevos usuarios activos como la diferencia entre usuarios creados y cerrados.
   measure: new_active_users {
-    type: number
+    type: sum
     sql: ${TABLE}.new_active_users ;;
     description: "Número de nuevos usuarios activos, calculado como la diferencia entre usuarios creados y cerrados."
   }

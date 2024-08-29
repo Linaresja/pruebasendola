@@ -26,7 +26,7 @@ view: total_user_by_day_lk {
   }
 
   measure: countusernew {
-    type: count
+    type: number
     drill_fields: [new_active_users]
   }
 

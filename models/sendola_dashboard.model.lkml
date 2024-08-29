@@ -37,3 +37,5 @@ explore: combined_view {
 explore: person_kyc_level {}
 
 explore: total_users_by_day {}
+
+explore: total_user_by_day_lk {}

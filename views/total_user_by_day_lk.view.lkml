@@ -33,14 +33,6 @@ view: total_user_by_day_lk {
     description: "Número de nuevos usuarios activos, calculado como la diferencia entre usuarios creados y cerrados."
   }
 
-  # Dimensión para la fecha, con desglose de día, mes y año.
-  dimension_group: date {
-    type: time
-    timeframes: [date, month, year]
-    sql: ${TABLE}.date ;;
-    description: "Fecha de creación de los usuarios, con desglose de día, mes y año."
-  }
-
   # Dimensión para el conteo de usuarios creados en un día específico.
   dimension: created_users {
     type: number
@@ -53,6 +45,14 @@ view: total_user_by_day_lk {
     type: number
     sql: ${TABLE}.closed_users ;;
     description: "Número de usuarios cerrados en un día específico."
+  }
+
+  # Dimensión de grupo para la fecha, con desglose de día, mes y año.
+  dimension_group: date {
+    type: time
+    timeframes: [date, month, year]
+    sql: ${TABLE}.date ;;
+    description: "Fecha de creación de los usuarios, con desglose de día, mes y año."
   }
 
   # Conjunto de campos para realizar drill down y explorar en más detalle.

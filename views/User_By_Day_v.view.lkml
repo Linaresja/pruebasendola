@@ -4,7 +4,12 @@ view: user_day_by_day_v {
         SELECT
             CAST(`vu1`.`created_at` AS date) AS `date`,  # Fecha de creación como date
             `vu1`.`user_id` AS created_user_id,  # ID de usuario creado
-            `vu2`.`user_id` AS closed_user_id    # ID de usuario cerrado
+            `vu1`.`email` AS email,  # Añadir detalles de email
+            `vu1`.`phone` AS phone,  # Añadir detalles de teléfono
+            `vu1`.`status` AS status,  # Añadir el estatus
+            `vu1`.`country_origin` AS country_origin,  # País de origen
+            `vu1`.`application` AS application,  # Aplicación utilizada
+            `vu2`.`user_id` AS closed_user_id  # ID de usuario cerrado
         FROM
             `dwh_sendola.v_unique_users` `vu1`
         LEFT JOIN
@@ -17,7 +22,12 @@ view: user_day_by_day_v {
       SELECT
           total_user_by_day_lk.date AS total_user_by_day_lk_date_date,  # Fecha ya en formato de fecha
           total_user_by_day_lk.created_user_id AS total_user_by_day_lk_created_user_id,  # ID del usuario creado
-          total_user_by_day_lk.closed_user_id AS total_user_by_day_lk_closed_user_id    # ID del usuario cerrado
+          total_user_by_day_lk.closed_user_id AS total_user_by_day_lk_closed_user_id,    # ID del usuario cerrado
+          total_user_by_day_lk.email AS email,  # Email del usuario
+          total_user_by_day_lk.phone AS phone,  # Teléfono del usuario
+          total_user_by_day_lk.status AS status,  # Estatus del usuario
+          total_user_by_day_lk.country_origin AS country_origin,  # País de origen
+          total_user_by_day_lk.application AS application  # Aplicación usada
       FROM
           total_user_by_day_lk
       ORDER BY
@@ -32,14 +42,13 @@ view: user_day_by_day_v {
     description: "Fecha de creación de los usuarios, con desglose de día, semana, mes, trimestre y año."
   }
 
-  # Si no puedes traer los campos de nombre, puedes ajustar el campo full_name como un placeholder
+  # Otros campos para el drilldown
   dimension: full_name {
     type: string
     sql: "'Desconocido'" ;;  # Placeholder de texto para manejar la falta de campos de nombre
     description: "Nombre completo del usuario."
   }
 
-  # Otros campos para el drilldown
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;

@@ -59,11 +59,7 @@ view: total_user_by_day_lk {
   # Conjunto de campos para realizar drill down y explorar en más detalle.
   set: detail {
     fields: [
-      date_date,          # Desglose diario (date_date).
-      date_month,         # Desglose mensual (date_month).
-      date_year,          # Desglose anual (date_year).
-      created_users,
-      closed_users,
+      date_month,          # Desglose diario (date_date).
       new_active_users
     ]
   }

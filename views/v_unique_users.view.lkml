@@ -1,15 +1,5 @@
-# The name of this view in Looker is "V Unique Users"
 view: v_unique_users {
-  # The sql_table_name parameter indicates the underlying database table
-  # to be used for all fields in this view.
   sql_table_name: `dwh_sendola.v_unique_users` ;;
-
-  # No primary key is defined for this view. In order to join this view in an Explore,
-  # define primary_key: yes on a dimension that has no repeated values.
-
-    # Here's what a typical dimension looks like in LookML.
-    # A dimension is a groupable field that can be used to filter query results.
-    # This dimension will be called "Age" in Explore.
 
   dimension: age {
     type: number
@@ -23,16 +13,15 @@ view: v_unique_users {
     sql: ${age} ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
-  # measures for this dimension, but you can also add measures of many different aggregates.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
   measure: total_age {
     type: sum
-    sql: ${age} ;;  }
+    sql: ${age} ;;
+  }
+
   measure: average_age {
     type: average
-    sql: ${age} ;;  }
+    sql: ${age} ;;
+  }
 
   dimension: application {
     type: string
@@ -68,8 +57,6 @@ view: v_unique_users {
     type: string
     sql: ${TABLE}.country_origin ;;
   }
-  # Dates and timestamps can be represented in Looker using a dimension group of type: time.
-  # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: created {
     type: time
@@ -127,7 +114,7 @@ view: v_unique_users {
 
   dimension: full_name {
     type: string
-    sql: ${TABLE}.full_name ;;
+    sql: CONCAT(${first_name}, ' ', ${middle_name}, ' ', ${last_name}) ;;
   }
 
   dimension: gender {
@@ -243,8 +230,19 @@ view: v_unique_users {
     END ;;
   }
 
+  # Medida de conteo con drill_fields mejorado
   measure: count {
     type: count
-    drill_fields: [first_name, last_name, middle_name, full_name]
+    drill_fields: [
+      first_name,
+      last_name,
+      middle_name,
+      full_name,
+      email,
+      phone,
+      status,
+      created_date,
+      modified_date
+    ]
   }
 }

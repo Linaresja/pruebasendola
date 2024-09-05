@@ -42,13 +42,7 @@ view: user_day_by_day_v {
     description: "Fecha de creación de los usuarios, con desglose de día, semana, mes, trimestre y año."
   }
 
-  # Otros campos para el drilldown
-  dimension: full_name {
-    type: string
-    sql: "'Desconocido'" ;;  # Placeholder de texto para manejar la falta de campos de nombre
-    description: "Nombre completo del usuario."
-  }
-
+  # Dimensiones adicionales para el drilldown
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
@@ -92,40 +86,39 @@ view: user_day_by_day_v {
     description: "ID del usuario cerrado en un día específico."
   }
 
-  # Definir COUNT como dimensión calculada
-  dimension: count_created_users {
-    type: number
-    sql: COUNT(${created_user_id}) ;;
+  # Medida que cuenta los usuarios creados
+  measure: count_created_users {
+    type: count_distinct
+    sql: ${created_user_id} ;;
     description: "Número de usuarios creados en un día específico."
   }
 
-  dimension: count_closed_users {
-    type: number
-    sql: COUNT(${closed_user_id}) ;;
+  # Medida que cuenta los usuarios cerrados
+  measure: count_closed_users {
+    type: count_distinct
+    sql: ${closed_user_id} ;;
     description: "Número de usuarios cerrados en un día específico."
   }
 
-  # Métrica calculada para nuevos usuarios activos
+  # Medida que calcula la diferencia entre usuarios creados y cerrados
   measure: new_active_users {
     type: number
     sql: ${count_created_users} - ${count_closed_users} ;;
     description: "Número de nuevos usuarios activos, calculado como la diferencia entre usuarios creados y cerrados."
-    drill_fields: [created_user_id, closed_user_id, date_date, full_name, email, phone, status, country_origin, application]
+    drill_fields: [created_user_id, closed_user_id, date_date, email, phone, status, country_origin, application]
   }
 
-  # Set de detalles para drilldown
+  # Set de detalles para drilldown (sin agregación)
   set: detail {
     fields: [
-      date_date,  # Referencia correcta a la dimensión de fecha derivada del grupo
       created_user_id,  # Mostrar los detalles de los usuarios creados
       closed_user_id,   # Mostrar los detalles de los usuarios cerrados
-      full_name,        # Nombre completo del usuario
+      date_date,        # Fecha de creación
       email,            # Email del usuario
       phone,            # Teléfono del usuario
       status,           # Estado del usuario
       country_origin,   # País de origen
-      application,      # Aplicación usada
-      new_active_users  # Usuarios nuevos activos
+      application       # Aplicación usada
     ]
   }
 }

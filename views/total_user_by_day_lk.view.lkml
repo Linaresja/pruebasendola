@@ -31,6 +31,7 @@ view: total_user_by_day_lk {
     type: sum
     sql: ${TABLE}.new_active_users ;;
     description: "Número de nuevos usuarios activos, calculado como la diferencia entre usuarios creados y cerrados."
+    drill_fields: [detail*]  # Agregar el set de drill down aquí
   }
 
   # Dimensión para el conteo de usuarios creados en un día específico.

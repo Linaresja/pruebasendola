@@ -1,4 +1,4 @@
-view: user_day {
+view: user_day_by_day_v {
   derived_table: {
     sql: WITH total_user_by_day_lk AS (
         SELECT

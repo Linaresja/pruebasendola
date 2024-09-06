@@ -58,18 +58,29 @@ view: v_unique_users {
     sql: ${TABLE}.country_origin ;;
   }
 
-  # Ajuste a tipo string en lugar de location
+  # Nueva dimensión geográfica usando latitud y longitud
   dimension: country_origin_geo {
-    type: string
-    sql:
+    type: location
+    sql_latitude:
       CASE
-        WHEN ${TABLE}.country_origin = 'COL' THEN 'Colombia'
-        WHEN ${TABLE}.country_origin = 'GTM' THEN 'Guatemala'
-        WHEN ${TABLE}.country_origin = 'HND' THEN 'Honduras'
-        WHEN ${TABLE}.country_origin = 'IND' THEN 'India'
-        WHEN ${TABLE}.country_origin IN ('MEX', 'Mex') THEN 'Mexico'
-        WHEN ${TABLE}.country_origin = 'SLV' THEN 'El Salvador'
-        WHEN ${TABLE}.country_origin = 'USA' THEN 'United States'
+        WHEN ${TABLE}.country_origin = 'COL' THEN 4.0000
+        WHEN ${TABLE}.country_origin = 'GTM' THEN 15.7835
+        WHEN ${TABLE}.country_origin = 'HND' THEN 15.2000
+        WHEN ${TABLE}.country_origin = 'IND' THEN 20.5937
+        WHEN ${TABLE}.country_origin IN ('MEX', 'Mex') THEN 23.6345
+        WHEN ${TABLE}.country_origin = 'SLV' THEN 13.8333
+        WHEN ${TABLE}.country_origin = 'USA' THEN 37.0902
+        ELSE NULL
+      END ;;
+    sql_longitude:
+      CASE
+        WHEN ${TABLE}.country_origin = 'COL' THEN -72.0000
+        WHEN ${TABLE}.country_origin = 'GTM' THEN -90.2308
+        WHEN ${TABLE}.country_origin = 'HND' THEN -86.2419
+        WHEN ${TABLE}.country_origin = 'IND' THEN 78.9629
+        WHEN ${TABLE}.country_origin IN ('MEX', 'Mex') THEN -102.5528
+        WHEN ${TABLE}.country_origin = 'SLV' THEN -88.9167
+        WHEN ${TABLE}.country_origin = 'USA' THEN -95.7129
         ELSE NULL
       END ;;
   }

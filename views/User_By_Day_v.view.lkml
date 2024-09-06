@@ -50,12 +50,21 @@ view: user_day_by_day_v {
     description: "Número de usuarios cerrados."
   }
 
-  measure: new_active_users {
-    type: number
-    sql: ${count_created_users} - ${count_closed_users} ;;
-    description: "Número de nuevos usuarios activos."
-    drill_fields: [user_day_by_day_v_detail.*]  # Usar la vista detallada para el drilldown
-  }
+ measure: new_active_users {
+  type: number
+  sql: ${count_created_users} - ${count_closed_users} ;;
+  description: "Número de nuevos usuarios activos."
+  drill_fields: [
+    user_day_by_day_v_detail.created_user_id,
+    user_day_by_day_v_detail.closed_user_id,
+    user_day_by_day_v_detail.email,
+    user_day_by_day_v_detail.phone,
+    user_day_by_day_v_detail.status,
+    user_day_by_day_v_detail.country_origin,
+    user_day_by_day_v_detail.application,
+    user_day_by_day_v_detail.date
+  ]  # Incluir las dimensiones específicas en el drilldown
+}
 
   # Dimensiones para fecha y drilldown básico
   dimension_group: date {

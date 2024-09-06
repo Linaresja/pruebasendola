@@ -1,6 +1,55 @@
 view: v_unique_users {
   sql_table_name: `dwh_sendola.v_unique_users` ;;
 
+  # Dimensiones y medidas relacionadas con fechas
+  dimension_group: created {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.created_at ;;
+  }
+
+  # Definir la dimensión `modified_at`
+  dimension_group: modified {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.modified_at ;;
+  }
+
+  # Medidas para contar usuarios creados y cerrados
+  measure: created_users {
+    type: count_distinct
+    sql: ${TABLE}.user_id ;;
+    description: "Número de usuarios creados."
+  }
+
+  # Medida ajustada para contar usuarios cerrados
+  measure: closed_users {
+    type: count_distinct
+    sql: CASE
+           WHEN ${status} != 'active' AND ${modified_raw} IS NOT NULL THEN ${user_id}
+           ELSE NULL
+         END ;;
+    description: "Número de usuarios cerrados."
+  }
+
+  # Medida para calcular la diferencia entre usuarios creados y cerrados
+  measure: new_active_users {
+    type: number
+    sql: ${created_users} - ${closed_users} ;;
+    description: "Número de nuevos usuarios activos (usuarios creados - usuarios cerrados)."
+    drill_fields: [
+      user_id,
+      first_name,
+      last_name,
+      email,
+      phone,
+      status,
+      created_date,
+      modified_date
+    ]
+  }
+
+  # Otras dimensiones
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
@@ -13,6 +62,7 @@ view: v_unique_users {
     sql: ${age} ;;
   }
 
+  # Medidas de edad
   measure: total_age {
     type: sum
     sql: ${age} ;;
@@ -59,7 +109,7 @@ view: v_unique_users {
     sql: ${TABLE}.country_origin ;;
   }
 
-  # Nueva dimensión geográfica usando latitud y longitud
+  # Dimensión geográfica usando latitud y longitud
   dimension: country_origin_geo {
     type: location
     sql_latitude:
@@ -84,12 +134,6 @@ view: v_unique_users {
         WHEN ${TABLE}.country_origin = 'USA' THEN -95.7129
         ELSE NULL
       END ;;
-  }
-
-  dimension_group: created {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.created_at ;;
   }
 
   dimension: customer {
@@ -189,12 +233,6 @@ view: v_unique_users {
   dimension: middle_name {
     type: string
     sql: ${TABLE}.middle_name ;;
-  }
-
-  dimension_group: modified {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.modified_at ;;
   }
 
   dimension: monthly_payroll {

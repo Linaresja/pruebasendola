@@ -43,3 +43,5 @@ explore: total_user_by_day_lk {}
 explore: user_day {}
 
 explore: user_day_by_day_v {}
+
+explore: user_day_by_day_v_detail {}

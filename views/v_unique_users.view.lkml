@@ -58,6 +58,22 @@ view: v_unique_users {
     sql: ${TABLE}.country_origin ;;
   }
 
+  # Ajuste a tipo string en lugar de location
+  dimension: country_origin_geo {
+    type: string
+    sql:
+      CASE
+        WHEN ${TABLE}.country_origin = 'COL' THEN 'Colombia'
+        WHEN ${TABLE}.country_origin = 'GTM' THEN 'Guatemala'
+        WHEN ${TABLE}.country_origin = 'HND' THEN 'Honduras'
+        WHEN ${TABLE}.country_origin = 'IND' THEN 'India'
+        WHEN ${TABLE}.country_origin IN ('MEX', 'Mex') THEN 'Mexico'
+        WHEN ${TABLE}.country_origin = 'SLV' THEN 'El Salvador'
+        WHEN ${TABLE}.country_origin = 'USA' THEN 'United States'
+        ELSE NULL
+      END ;;
+  }
+
   dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]

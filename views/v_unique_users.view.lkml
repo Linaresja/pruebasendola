@@ -55,6 +55,7 @@ view: v_unique_users {
 
   dimension: country_origin {
     type: string
+    map_layer_name: countries  # Usar la capa predefinida de países
     sql: ${TABLE}.country_origin ;;
   }
 

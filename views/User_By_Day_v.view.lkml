@@ -105,6 +105,7 @@ view: user_day_by_day_v {
     type: number
     sql: ${count_created_users} - ${count_closed_users} ;;
     description: "Número de nuevos usuarios activos, calculado como la diferencia entre usuarios creados y cerrados."
+    # Aquí solo incluimos dimensiones para evitar agrupamiento en drilldown
     drill_fields: [created_user_id, closed_user_id, date_date, email, phone, status, country_origin, application]
   }
 

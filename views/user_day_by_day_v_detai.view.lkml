@@ -82,4 +82,18 @@ view: user_day_by_day_v_detail {
     sql: ${TABLE}.total_user_by_day_lk_date_date ;;
     description: "Fecha de creación del usuario."
   }
+
+  # Set que agrupa todas las dimensiones para usar en el drilldown
+  set: drilldown_fields {
+    fields: [
+      created_user_id,
+      closed_user_id,
+      email,
+      phone,
+      status,
+      country_origin,
+      application,
+      date_date
+    ]
+  }
 }

@@ -5,8 +5,6 @@
 # Además, se considera la presencia de cuentas asociadas en la tabla `v_unique_users` para determinar reglas adicionales.
 
 view: derived_table {
-  # Esta tabla derivada realiza una consulta SQL que une las tablas `transaction_plattform` (tp)
-  # y `v_unique_users` (vu) sobre la base del campo `customer_id`.
   derived_table: {
     sql: SELECT
             tp.user_id,
@@ -23,7 +21,6 @@ view: derived_table {
           LEFT JOIN `dwh_sendola.transaction_plattform` tp
           ON tp.user_id = vu.user_id ;;
   }
-
 
   dimension: customer_id {
     type: string
@@ -55,9 +52,6 @@ view: derived_table {
     sql: ${TABLE}.user_id ;;
   }
 
- # Esta dimensión calcula si una transacción es un depósito directo (dd_deposit).
-  # La regla se basa en que el tipo de transacción sea "credit" y que la descripción coincida con ciertos patrones,
-  # además de que el banco patrocinador sea "Banner Bank" y el cliente tenga más de 0 cuentas Plaid.
   dimension: dd_deposit {
     type: yesno
     sql:
@@ -67,23 +61,34 @@ view: derived_table {
           REGEXP_CONTAINS(${description}, r'JRNL ENTRY - SHARE DRAFT FROM REGULAR SHARE') OR
           REGEXP_CONTAINS(${description}, r'PAY \d+')
         )
-        or ( ${sponsor_bank} = 'Banner Bank'
+        OR ( ${sponsor_bank} = 'Banner Bank'
         AND ${plaid_accounts} > 0)
         THEN TRUE
         ELSE FALSE
       END ;;
   }
-# Medida que cuenta el número de registros en la vista combinada.
- measure: count {
-  type: count
-}
 
-# Medida que cuenta el número de registros en la vista combinada.
+  measure: count {
+    type: count
+    drill_fields: [
+      customer_id,
+      txn_type,
+      description,
+      sponsor_bank,
+      plaid_accounts,
+      user_id,
+      dd_deposit
+    ]
+  }
+
   measure: distinct_user_count {
     type: count_distinct
     sql: ${user_id} ;;
     description: "Cuenta el número de usuarios únicos basados en el campo user_id."
+    drill_fields: [
+      customer_id,
+      txn_type,
+      sponsor_bank
+    ]
   }
-
-  # Aquí puedes definir otras dimensiones y medidas según sea necesario.
-  }
+}

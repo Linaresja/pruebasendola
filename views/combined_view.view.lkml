@@ -5,6 +5,8 @@
 # Además, se considera la presencia de cuentas asociadas en la tabla `v_unique_users` para determinar reglas adicionales.
 
 view: derived_table {
+  # This derived table performs a SQL query joining the `transaction_plattform` (tp)
+  # and `v_unique_users` (vu) tables based on the `user_id` field.
   derived_table: {
     sql: SELECT
             tp.user_id,
@@ -16,7 +18,8 @@ view: derived_table {
               WHEN vu.banner_accounts = 0 AND vu.coppel_accounts = 0 AND vu.usi_accounts > 0 THEN 'USI'
               ELSE 'Without Program'
             END AS sponsor_bank,
-            vu.plaid_accounts
+            vu.plaid_accounts,
+            vu.customer_id  -- Ensure customer_id is included
           FROM `dwh_sendola.v_unique_users` vu
           LEFT JOIN `dwh_sendola.transaction_plattform` tp
           ON tp.user_id = vu.user_id ;;
@@ -52,6 +55,7 @@ view: derived_table {
     sql: ${TABLE}.user_id ;;
   }
 
+  # Yes/No dimension to check if the transaction is a direct deposit (dd_deposit)
   dimension: dd_deposit {
     type: yesno
     sql:
@@ -68,6 +72,7 @@ view: derived_table {
       END ;;
   }
 
+  # Measure that counts the total number of records
   measure: count {
     type: count
     drill_fields: [
@@ -78,17 +83,21 @@ view: derived_table {
       plaid_accounts,
       user_id,
       dd_deposit
-    ]
+    ]  # Include all relevant fields to drill down
   }
 
+  # Measure that counts distinct users based on user_id
   measure: distinct_user_count {
     type: count_distinct
     sql: ${user_id} ;;
-    description: "Cuenta el número de usuarios únicos basados en el campo user_id."
+    description: "Counts the number of distinct users based on the user_id field."
     drill_fields: [
       customer_id,
       txn_type,
-      sponsor_bank
-    ]
+      sponsor_bank,
+      user_id
+    ]  # Include necessary fields to see user-specific details during drill-down
   }
+
+  # Optional: Define additional measures or dimensions as needed.
 }

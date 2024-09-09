@@ -1,15 +1,5 @@
-# The name of this view in Looker is "Person Kyc Level"
 view: person_kyc_level {
-  # The sql_table_name parameter indicates the underlying database table
-  # to be used for all fields in this view.
   sql_table_name: `general-dashboard-prod.dwh_sendola.person_kyc_level` ;;
-
-  # No primary key is defined for this view. In order to join this view in an Explore,
-  # define primary_key: yes on a dimension that has no repeated values.
-
-    # Here's what a typical dimension looks like in LookML.
-    # A dimension is a groupable field that can be used to filter query results.
-    # This dimension will be called "Full Name" in Explore.
 
   dimension: full_name {
     type: string
@@ -18,22 +8,48 @@ view: person_kyc_level {
 
   dimension: kyc_level1_status {
     type: string
-    sql: ${TABLE}.kyc_level1_status ;;
+    sql: CASE
+        WHEN ${TABLE}.kyc_level1_status = 'approved' THEN 'Approved'
+        WHEN ${TABLE}.kyc_level1_status = 'started' THEN 'Started'
+        WHEN ${TABLE}.kyc_level1_status = 'inReview' THEN 'In Review'
+        WHEN ${TABLE}.kyc_level1_status = 'declined' THEN 'Declined'
+        WHEN ${TABLE}.kyc_level1_status = 'notStarted' THEN 'Not Started'
+        ELSE ${TABLE}.kyc_level1_status
+    END ;;
   }
 
   dimension: kyc_level2_status {
     type: string
-    sql: ${TABLE}.kyc_level2_status ;;
+    sql: CASE
+        WHEN ${TABLE}.kyc_level2_status = 'approved' THEN 'Approved'
+        WHEN ${TABLE}.kyc_level2_status = 'started' THEN 'Started'
+        WHEN ${TABLE}.kyc_level2_status = 'inReview' THEN 'In Review'
+        WHEN ${TABLE}.kyc_level2_status = 'declined' THEN 'Declined'
+        WHEN ${TABLE}.kyc_level2_status = 'notStarted' THEN 'Not Started'
+        ELSE ${TABLE}.kyc_level2_status
+    END ;;
   }
 
   dimension: kyc_level3_status {
     type: string
-    sql: ${TABLE}.kyc_level3_status ;;
+    sql: CASE
+        WHEN ${TABLE}.kyc_level3_status = 'approved' THEN 'Approved'
+        WHEN ${TABLE}.kyc_level3_status = 'started' THEN 'Started'
+        WHEN ${TABLE}.kyc_level3_status = 'inReview' THEN 'In Review'
+        WHEN ${TABLE}.kyc_level3_status = 'declined' THEN 'Declined'
+        WHEN ${TABLE}.kyc_level3_status = 'notStarted' THEN 'Not Started'
+        ELSE ${TABLE}.kyc_level3_status
+    END ;;
   }
 
   dimension: onboarding_status {
     type: string
-    sql: ${TABLE}.onboarding_status ;;
+    sql: CASE
+        WHEN ${TABLE}.onboarding_status = 'completed' THEN 'Completed'
+        WHEN ${TABLE}.onboarding_status = 'started' THEN 'Started'
+        WHEN ${TABLE}.onboarding_status = 'notStarted' THEN 'Not Started'
+        ELSE ${TABLE}.onboarding_status
+    END ;;
   }
 
   dimension: pep_status {
@@ -45,8 +61,6 @@ view: person_kyc_level {
     type: string
     sql: ${TABLE}.person_id ;;
   }
-  # Dates and timestamps can be represented in Looker using a dimension group of type: time.
-  # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: timestamp {
     type: time
@@ -58,8 +72,18 @@ view: person_kyc_level {
     type: string
     sql: ${TABLE}.user_id ;;
   }
+
+  # Updated measure to show more fields in drill-down
   measure: count {
     type: count
-    drill_fields: [full_name]
+    drill_fields: [
+      full_name,
+      onboarding_status,
+      kyc_level1_status,
+      kyc_level2_status,
+      kyc_level3_status,
+      pep_status,
+      person_id
+    ]
   }
 }

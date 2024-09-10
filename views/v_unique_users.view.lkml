@@ -1,6 +1,5 @@
 view: v_unique_users {
   sql_table_name: `dwh_sendola.v_unique_users` ;;
-
   # Dimensiones y medidas relacionadas con fechas
   dimension_group: created {
     type: time

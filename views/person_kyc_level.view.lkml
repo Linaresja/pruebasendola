@@ -5,7 +5,6 @@ view: person_kyc_level {
     type: string
     sql: ${TABLE}.full_name ;;
   }
-
   dimension: kyc_level1_status {
     type: string
     sql: CASE
